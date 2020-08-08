@@ -5,7 +5,8 @@ defmodule Doumi.MixProject do
     [
       app: :doumi,
       version: "0.1.0",
-      elixir: "~> 1.5",
+      elixir: "~> 1.7",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -18,11 +19,15 @@ defmodule Doumi.MixProject do
     ]
   end
 
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:ecto, "~> 2.2 or ~> 3.0", optional: true},
+      {:ecto_sql, "~> 3.0", optional: true},
+      {:postgrex, "~> 0.15.0", only: :test}
     ]
   end
 end
