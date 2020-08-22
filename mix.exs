@@ -31,6 +31,9 @@ defmodule Doumi.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
+      {:ecto, "~> 2.2 or ~> 3.0", optional: true},
+      {:ecto_sql, "~> 3.0", optional: true},
+      {:postgrex, "~> 0.15.0", only: :test}
     ]
   end
 
