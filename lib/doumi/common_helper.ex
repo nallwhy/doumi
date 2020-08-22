@@ -3,8 +3,12 @@ defmodule Doumi.CommonHelper do
     unquote(Mix.env())
   end
 
-  defmacro defbang(func_name, arity) do
+  defmacro defbang(func_name, arity) when is_atom(func_name) do
+    alias Doumi.ShouldNotNilError
+
     module = __CALLER__.module
+
+    # TODO: check for the existance of function
 
     args =
       0..(arity - 1)
@@ -14,15 +18,17 @@ defmodule Doumi.CommonHelper do
       def unquote(:"#{func_name}!")(unquote_splicing(args)) do
         case apply(unquote(module), unquote(func_name), unquote(args)) do
           {:ok, value} -> value
-          nil -> raise "Bang!"
+          nil -> raise ShouldNotNilError
           value -> value
         end
       end
     end
   end
 
-  defmacro defasync(func_name, arity) do
+  defmacro defasync(func_name, arity) when is_atom(func_name) do
     module = __CALLER__.module
+
+    # TODO: check for the existance of function
 
     args =
       0..(arity - 1)

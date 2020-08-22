@@ -1,32 +1,41 @@
 defmodule Doumi.EctoHelperTest do
   use Doumi.EctoCase, async: true
-  use Doumi.EctoHelper
+  alias Doumi.EctoHelper
 
-  # @error_changeset %Ecto.Changeset{
-  #   action: :update,
-  #   changes: %{field0: "value0", field1: 1},
-  #   errors: [field0: {"is invalid", []}],
-  #   data: %{},
-  #   valid?: false
-  # }
-
-  defmodule TestModule do
-    use Ecto.Schema
-    import Ecto.{Query, Changeset}
-
-    schema "test" do
-      field(:field0, :boolean)
-      field(:field1, :string)
-      field(:field2, :integer)
-    end
-  end
-
-  describe "has_error?/2" do
-    test "returns true if changeset has the error" do
-    end
-  end
+  @changeset %Ecto.Changeset{
+    types: %{field0: :string, field1: :integer},
+    action: :update,
+    changes: %{field0: "value0", field1: 1},
+    errors: [],
+    data: %{},
+    valid?: false
+  }
 
   describe "has_error?/3" do
+    test "with key and message returns true if changeset has the error" do
+      changeset = %Ecto.Changeset{@changeset | errors: [field0: {"is invalid", []}]}
 
+      assert EctoHelper.has_error?(changeset, :field0, "is invalid") == true
+      assert EctoHelper.has_error?(changeset, :field0, :invalid) == true
+      assert EctoHelper.has_error?(changeset, :field0) == true
+    end
+
+    test "with key and message returns false if changeset don't have any errors" do
+      changeset = @changeset
+
+      assert EctoHelper.has_error?(changeset, :field0, "is invalid") == false
+    end
+
+    test "with key and message returns false if changeset has an error with the other key" do
+      changeset = %Ecto.Changeset{@changeset | errors: [field0: {"is invalid", []}]}
+
+      assert EctoHelper.has_error?(changeset, :field1, "is invalid") == false
+    end
+
+    test "with key and message returns false if changeset has an error with the other message" do
+      changeset = %Ecto.Changeset{@changeset | errors: [field0: {"does not exist", []}]}
+
+      assert EctoHelper.has_error?(changeset, :field0, "is invalid") == false
+    end
   end
 end

@@ -2,25 +2,24 @@ defmodule Doumi.TestRepo.Migrations.MigrateAll do
   use Ecto.Migration
 
   def change do
-    create table(:users) do
-      add :name, :string
-      add :admin, :boolean
-      add :net_worth, :decimal
-      add :signed_at, :naive_datetime, default: fragment("CURRENT_TIMESTAMP")
+    create table(:ecto_case_tests, primary_key: false) do
+      add :required_field0, :integer, primary_key: true
+      add :required_field1, :integer, primary_key: true
+      add :not_required_field0, :integer
     end
 
-    create table(:articles) do
-      add :title, :string
-      add :author_id, :integer
-      add :editor_id, :integer
-      add :publisher_id, :integer
-      add :visits, :decimal
+    create table(:query_test_parents) do
     end
 
-    create table(:comments) do
-      add :article_id, :integer
-      add :author, :map
-      add :links, {:array, :map}, default: []
+    create table(:query_tests, primary_key: false) do
+      add :required_field0, :integer, primary_key: true
+      add :required_field1, :integer, primary_key: true
+      add :not_required_field0, :string
+      add :parent_id, references(:query_test_parents)
+    end
+
+    create table(:repo_tests) do
+      add :field0, :integer
     end
   end
 end
