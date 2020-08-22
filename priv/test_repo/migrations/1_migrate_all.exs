@@ -7,5 +7,9 @@ defmodule Doumi.TestRepo.Migrations.MigrateAll do
       add :required_field1, :integer, primary_key: true
       add :not_required_field0, :integer
     end
+
+    create table(:repo_tests) do
+      add :field0, :integer
+    end
   end
 end
