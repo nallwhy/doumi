@@ -2,10 +2,13 @@ defmodule Doumi.LogHelper do
   defmacro __using__(_opts) do
     quote do
       require Logger
+      import unquote(__MODULE__)
+    end
+  end
 
-      def format_log(messages) do
-        unquote(__MODULE__).format_log(messages, __ENV__)
-      end
+  defmacro format_log(messages) do
+    quote do
+      unquote(__MODULE__).format_log(unquote(messages), __ENV__)
     end
   end
 

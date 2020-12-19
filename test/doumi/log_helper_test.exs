@@ -29,7 +29,7 @@ defmodule Doumi.LogHelperTest do
         end)
 
       assert capture =~
-               "[error] [Doumi.LogHelperTest.Test.format_log/1] " <>
+               "[error] [Doumi.LogHelperTest.Test.func/1] " <>
                  "integer: 1, " <>
                  "float: 1.0, " <>
                  "boolean: true, " <>
