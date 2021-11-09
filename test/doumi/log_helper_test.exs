@@ -36,7 +36,10 @@ defmodule Doumi.LogHelperTest do
                  "atom: :atom, " <>
                  "string: \"string\", " <>
                  "list: [1, 2], " <>
-                 "tuple: {1, 2}, " <> "map: %{a: 1}, " <> "struct: %Doumi.LogHelperTest.Test{}"
+                 "tuple: {1, 2}, " <>
+                 "map: %{a: 1}, " <>
+                 "struct: %Doumi.LogHelperTest.Test{}, " <>
+                 "stacktrace: "
     end
   end
 end

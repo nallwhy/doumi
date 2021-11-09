@@ -8,13 +8,15 @@ defmodule Doumi.LogHelper do
 
   defmacro format_log(messages) do
     quote do
-      unquote(__MODULE__).format_log(unquote(messages), __ENV__)
+      {:current_stacktrace, [_ | stacktrace]} = Process.info(self(), :current_stacktrace)
+
+      unquote(__MODULE__).format_log(unquote(messages), __ENV__, stacktrace)
     end
   end
 
-  def format_log(messages, env) do
+  def format_log(messages, env, stacktrace) do
     messages_str =
-      messages
+      (messages ++ [{:stacktrace, Exception.format_stacktrace(stacktrace)}])
       |> Enum.map(fn {key, message} -> "#{key}: #{inspect(message)}" end)
       |> Enum.join(", ")
 
