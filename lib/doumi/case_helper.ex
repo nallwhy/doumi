@@ -16,6 +16,8 @@ defmodule Doumi.CaseHelper do
   end
 
   def same_values?(%DateTime{} = a, %DateTime{} = b), do: DateTime.compare(a, b) == :eq
+  def same_values?(a, b) when is_binary(a) and is_atom(b), do: a == to_string(b)
+  def same_values?(a, b) when is_atom(a) and is_binary(b), do: to_string(a) == b
 
   if Code.ensure_loaded?(Decimal) do
     def same_values?(%Decimal{} = a, %Decimal{} = b), do: Decimal.equal?(a, b)
