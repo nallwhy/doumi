@@ -1,7 +1,7 @@
 defmodule Doumi.MixProject do
   use Mix.Project
 
-  @version "0.2.2"
+  @version "0.2.3"
   @project_url "https://github.com/nallwhy/doumi"
 
   def project do
