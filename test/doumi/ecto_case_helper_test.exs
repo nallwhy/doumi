@@ -122,8 +122,6 @@ defmodule Doumi.EctoCaseHelperTest do
 
   describe "reload/2" do
     setup do
-      Application.put_env(:doumi, :default_repo, TestRepo)
-
       data =
         TestRepo.insert!(%EctoCaseTestModule{
           required_field0: 0,
@@ -131,18 +129,35 @@ defmodule Doumi.EctoCaseHelperTest do
           not_required_field0: 0
         })
 
-      on_exit(fn ->
-        Application.put_env(:doumi, :default_repo, nil)
-      end)
+      TestRepo.update!(Ecto.Changeset.change(data, %{not_required_field0: 1}))
 
       %{data: data}
     end
 
     test "returns data with valid data", %{data: data} do
-      TestRepo.update!(Ecto.Changeset.change(data, %{not_required_field0: 1}))
+      Application.put_env(:doumi, :default_repo, TestRepo)
+
+      on_exit(fn -> Application.put_env(:doumi, :default_repo, nil) end)
 
       assert reloaded_data = EctoCaseHelper.reload(data)
       assert reloaded_data.not_required_field0 == 1
+    end
+
+    test "returns data with repo opts", %{data: data} do
+      assert reloaded_data = EctoCaseHelper.reload(data, repo: TestRepo)
+      assert reloaded_data.not_required_field0 == 1
+    end
+
+    test "fails with no repo env, opts", %{data: data} do
+      assert_raise UndefinedFunctionError, fn ->
+        EctoCaseHelper.reload(data)
+      end
+    end
+
+    test "with opts", %{data: data} do
+      assert_raise RuntimeError, "crash", fn ->
+        EctoCaseHelper.reload(data, repo: TestRepo, crash: TestRepo)
+      end
     end
   end
 end

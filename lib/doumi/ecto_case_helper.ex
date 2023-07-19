@@ -54,8 +54,8 @@ if Code.ensure_loaded?(Ecto) do
       end
     end
 
-    def reload(data, repo \\ nil) do
-      repo = repo || Application.get_env(:doumi, :default_repo)
+    def reload(data, opts \\ []) do
+      {repo, opts} = opts |> Keyword.pop(:repo, Application.get_env(:doumi, :default_repo))
 
       clauses =
         data.__struct__.__schema__(:primary_key)
@@ -63,11 +63,11 @@ if Code.ensure_loaded?(Ecto) do
           {primary_key, Map.get(data, primary_key)}
         end)
 
-      repo.get_by(data.__struct__, clauses)
+      repo.get_by(data.__struct__, clauses, opts)
     end
 
-    def reload!(data, repo \\ nil) do
-      case reload(data, repo) do
+    def reload!(data, opts \\ []) do
+      case reload(data, opts) do
         nil -> raise ShouldNotNilError
         value -> value
       end
